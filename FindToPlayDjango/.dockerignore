@@ -1,0 +1,17 @@
+.git/
+/hello.py
+/identifier.sqlite
+/pyproject.toml
+/uv.lock
+/README.md
+/db.sqlite3
+
+.idea/
+__pycache__/
+.venv/
+*.log
+infra/*
+!infra/app.Dockerfile
+tests/
+.env
+.python-version
