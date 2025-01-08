@@ -1,0 +1,43 @@
+services:
+  findtoplay:
+    image: bluzer/findtoplay:latest
+    container_name: findtoplay
+    volumes:
+      - .:/app
+      - ./static:/app/static
+    ports:
+      - "8000:5000"
+    environment:
+      - PG_NAME=${PG_NAME}
+      - PG_USER=${PG_USER}
+      - PG_PASSWORD=${PG_PASSWORD}
+      - PG_HOST=db
+      - PG_PORT=${PG_PORT}
+      - DJANGO_SUPERUSER_USERNAME=${DJANGO_SUPERUSER_USERNAME}
+      - DJANGO_SUPERUSER_PASSWORD=${DJANGO_SUPERUSER_PASSWORD}
+      - DJANGO_SUPERUSER_EMAIL=${DJANGO_SUPERUSER_EMAIL}
+      - DJANGO_ALLOWED_HOSTS=${DJANGO_ALLOWED_HOSTS}
+      - DEBUG_MODE=${DEBUG_MODE}
+    command: >
+      sh -c "cd app &&
+             uv run manage.py migrate &&
+             uv run manage.py collectstatic --noinput &&
+             uv run gunicorn --bind 0.0.0.0:5000 FindToPlayDjango.wsgi:application"
+    depends_on:
+      - db
+
+  db:
+    image: postgres:16
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+      POSTGRES_DB: ${PG_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

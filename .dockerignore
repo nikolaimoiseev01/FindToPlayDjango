@@ -1,8 +1,7 @@
 .git/
 /hello.py
 /identifier.sqlite
-/pyproject.toml
-/uv.lock
+
 /README.md
 /db.sqlite3
 

@@ -1,7 +1,5 @@
 from rest_framework import serializers
 
-from events.models import Event
-
 
 class EventSerializer(serializers.Serializer):
     title = serializers.CharField(max_length=200)
